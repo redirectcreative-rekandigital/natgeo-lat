@@ -34,7 +34,8 @@ npm run build    # output ke dist/
 
 ## Aturan konten soal (wajib)
 - Semua soal & teks **orisinal**. Jangan menyalin soal resmi National Geographic Learning atau sumber berhak cipta lain.
-- Setiap paket latihan berisi **12 soal: 3 `preA1`, 3 `A1`, 3 `A2`, 3 `B1`**, berurutan dari mudah ke sulit.
+- Setiap paket latihan berisi **12 soal: 3 `preA1`, 3 `A1`, 3 `A2`, 3 `B1`**, berurutan dari mudah ke sulit. Saat ini 6 paket per keterampilan (1–2 dasar, 3–4 menengah, 5–6 tantangan) + 2 Tryout; tema tiap paket berbeda.
+- `model` pada Speaking/Writing harus memenuhi `minWords` dan mengenai semua grup `keywords` (contoh jawaban harus dapat skor penuh).
 - Setiap soal wajib punya `id` unik secara global (pola: `r1-1`, `l2-5`, `s1-3`, …), `level` (`preA1` | `A1` | `A2` | `B1`), dan `explanation` dalam **Bahasa Indonesia**.
 - Soal **Tryout** harus berbeda dari semua soal latihan (teks, audio, maupun prompt). Tiap soal tryout wajib punya `skill`.
 - MCQ: `answer` adalah indeks 0-based ke `options`. Speaking/Writing: `keywords` berupa array grup sinonim; isi `minWords` (+ `minSentences` untuk writing) dan `model`.

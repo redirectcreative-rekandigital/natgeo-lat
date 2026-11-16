@@ -13,7 +13,7 @@ export const GROUPS = [
   { id: 'writing', name: 'Writing', label: 'Menulis', icon: 'PenLine', color: '#EA580C', desc: 'Tulis kata, pesan, hingga paragraf opini.' },
 ];
 
-export const TRYOUT_GROUP = { id: 'tryout', name: 'Tryout', label: 'Simulasi Ujian', icon: 'Trophy', color: '#0B2A5B', desc: 'Gabungan 5 keterampilan, 40 soal, 45 menit.' };
+export const TRYOUT_GROUP = { id: 'tryout', name: 'Tryout', label: 'Simulasi Ujian', icon: 'Trophy', color: '#0B2A5B', desc: 'Gabungan 5 keterampilan, 2 paket @ 40 soal, 45 menit.' };
 
 const all = [...readingSets, ...listeningSets, ...speakingSets, ...grammarSets, ...writingSets, ...tryoutSets];
 // isi skill default = group untuk paket latihan

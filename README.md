@@ -3,8 +3,8 @@
 Website latihan soal CEFR (Pre-A1 – B1) untuk guru SD Muhammadiyah Wonorejo.
 🌐 **https://natgeo.sdmuhwonorejo.com**
 
-- 5 kelompok latihan: **Reading, Listening, Speaking (voice note), Grammar & Vocab, Writing** — masing-masing 2 paket × 12 soal
-- **Tryout** gabungan 40 soal, 45 menit (soal berbeda dari latihan)
+- 5 kelompok latihan: **Reading, Listening, Speaking (voice note), Grammar & Vocab, Writing** — masing-masing 6 paket × 12 soal (Paket 1–2 dasar, 3–4 menengah, 5–6 tantangan)
+- **Tryout** 2 paket gabungan @ 40 soal, 45 menit (soal berbeda dari latihan; Tryout 2 lebih menantang)
 - Estimasi level CEFR per latihan + rincian per level & keterampilan
 - Pembahasan lengkap (Bahasa Indonesia) setelah setiap latihan
 - Hanya input nama, tanpa login; hasil tersimpan di browser

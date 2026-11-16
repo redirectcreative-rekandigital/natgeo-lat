@@ -14,7 +14,7 @@ Guru SD perlu berlatih menghadapi tes **CEFR correlation** (format National Geog
 | G1 | Guru bisa latihan per keterampilan kapan saja, di HP atau laptop | Halaman pertama tampil < 2 detik di 4G |
 | G2 | Setiap latihan memberi estimasi level CEFR | 100% latihan menampilkan level Pre-A1–B1 |
 | G3 | Guru memahami kesalahannya | Setiap soal punya pembahasan Bahasa Indonesia |
-| G4 | Ada simulasi ujian lengkap | 1 Tryout gabungan 5 keterampilan, soal berbeda dari latihan |
+| G4 | Ada simulasi ujian lengkap | 2 Tryout gabungan 5 keterampilan, soal berbeda dari latihan |
 
 **Bukan tujuan (v1):** login/akun, dashboard admin, sertifikat resmi, sinkronisasi antar perangkat.
 
@@ -40,8 +40,8 @@ Guru SD perlu berlatih menghadapi tes **CEFR correlation** (format National Geog
 | **Grammar & Vocabulary** | SpellCheck | Pilihan ganda, lengkapi kalimat | Otomatis |
 | **Writing** | PenLine | Menulis kalimat/paragraf pendek | Otomatis berbasis rubrik (jumlah kata, kata kunci, struktur kalimat, tanda baca) |
 
-- Setiap kelompok berisi **2 paket**, @ **12 soal**, berjenjang Pre-A1 → B1 (3 soal per level).
-- **Tryout**: 1 paket ±40 soal mencakup semua kelompok, **soal berbeda** dari latihan, ada timer (45 menit, bisa jeda).
+- Setiap kelompok berisi **6 paket**, @ **12 soal**, berjenjang Pre-A1 → B1 (3 soal per level). Tema tiap paket berbeda; kesulitan naik di dalam level yang sama: Paket 1–2 dasar, 3–4 menengah, 5–6 tantangan.
+- **Tryout**: 2 paket @ 40 soal (Tryout 2 lebih menantang) mencakup semua kelompok, **soal berbeda** dari latihan, ada timer (45 menit, bisa jeda).
 
 ### 4.4 Alur Latihan
 1. Pilih paket → layar intro (jumlah soal, perkiraan waktu, petunjuk).
@@ -87,7 +87,7 @@ src/
 ```
 
 ## 7. Konten
-- Total ±160 soal v1: 5 kelompok × 2 paket × 12 soal + Tryout 40 soal.
+- Total 440 soal: 5 kelompok × 6 paket × 12 soal + 2 Tryout × 40 soal.
 - Konteks: kehidupan sekolah, keluarga, alam & hewan (tema National Geographic), perjalanan, kesehatan.
 - Seluruh soal **orisinal** (bukan salinan soal resmi NatGeo Learning).
 
@@ -96,7 +96,7 @@ src/
 |------|-----|
 | v1.0 | Fitur di dokumen ini |
 | v1.1 | Rekap skor ke Google Sheets (Apps Script), mode Siswa |
-| v1.2 | Bank soal diperluas (3 paket/kelompok, 2 Tryout), audio MP3 natural |
+| v1.2 | ~~Bank soal diperluas~~ (selesai: 6 paket/kelompok, 2 Tryout), audio MP3 natural |
 
 ## 9. Risiko & Mitigasi
 | Risiko | Mitigasi |
