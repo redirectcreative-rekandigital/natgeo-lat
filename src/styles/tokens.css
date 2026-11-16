@@ -1,0 +1,33 @@
+:root {
+  --blue-900: #0B2A5B;
+  --blue-800: #123B80;
+  --blue-700: #1749A8;
+  --blue-600: #1E5BD8;
+  --blue-200: #C4D6FA;
+  --blue-100: #E3ECFD;
+  --blue-50: #F3F7FF;
+  --ink: #0F1B2D;
+  --ink-2: #4A5872;
+  --ink-3: #7A87A0;
+  --line: #DCE4F2;
+  --white: #FFFFFF;
+  --green: #16A34A;
+  --green-bg: #E8F7EE;
+  --red: #DC2626;
+  --red-bg: #FDECEC;
+  --amber: #B45309;
+  --amber-bg: #FEF3E2;
+  --yellow: #FFD43B;
+
+  --lv-preA1: #64748B; --lv-preA1-bg: #F1F5F9;
+  --lv-A1: #0284C7;    --lv-A1-bg: #E0F2FE;
+  --lv-A2: #1E5BD8;    --lv-A2-bg: #E3ECFD;
+  --lv-B1: #0B2A5B;    --lv-B1-bg: #DDE5F3;
+  --lv-below: #94A3B8; --lv-below-bg: #F1F5F9;
+
+  --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --r-sm: 8px; --r-md: 14px; --r-pill: 999px;
+  --shadow: 0 1px 2px rgba(15, 27, 45, .06), 0 4px 16px rgba(15, 27, 45, .06);
+  --shadow-lg: 0 8px 32px rgba(15, 27, 45, .12);
+  --header-h: 60px;
+}
