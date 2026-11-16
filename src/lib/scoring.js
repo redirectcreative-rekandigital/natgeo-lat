@@ -47,9 +47,13 @@ function scoreWrite(q, text = '') {
   }
   const len = Math.min(1, words / q.minWords);
   const sentences = countSentences(t);
+  // Tanda baca akhir dicek pada baris isi terakhir (≥4 kata), agar penutup surat
+  // seperti "Best regards," / nama penulis tidak dianggap kalimat tanpa titik.
+  const lines = t.split('\n').map((l) => l.trim()).filter(Boolean);
+  const lastBody = [...lines].reverse().find((l) => countWords(l) >= 4) || t;
   const checks = {
     capital: /^[A-Z"']/.test(t),
-    endPunct: /[.!?]["']?$/.test(t),
+    endPunct: /[.!?]["']?$/.test(lastBody),
     sentences: sentences >= (q.minSentences || 1),
   };
   const mech = Object.values(checks).filter(Boolean).length / 3;
