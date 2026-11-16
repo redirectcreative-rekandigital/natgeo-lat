@@ -75,7 +75,7 @@ Skor Speaking/Writing bernilai parsial (0–1) per soal.
 - **Data soal**: modul JS di `src/data/` (mudah ditambah tanpa backend).
 - **Audio**: Web Speech API `speechSynthesis` (en-US/en-GB).
 - **Speaking**: `MediaRecorder` (rekaman) + `SpeechRecognition` (transkrip).
-- **Hosting**: cPanel `public_html/natgeo` (subdomain), deploy otomatis via **GitHub Actions FTP** setiap push ke `main`.
+- **Hosting**: cPanel `public_html/natgeo` (subdomain), deploy manual (build → upload isi `dist/` via File Manager).
 
 ```
 src/

@@ -18,24 +18,15 @@ npm run dev      # http://localhost:5173
 npm run build    # hasil di folder dist/
 ```
 
-## Deploy ke cPanel (otomatis)
-Setiap push ke `main` → GitHub Actions build lalu upload `dist/` via FTP.
-
+## Deploy ke cPanel (manual)
+Persiapan (sekali saja):
 1. cPanel → **Domains/Subdomains**: buat `natgeo.sdmuhwonorejo.com` (document root mis. `public_html/natgeo`).
 2. cPanel → **SSL/TLS Status** → jalankan **AutoSSL** untuk subdomain (wajib HTTPS agar mikrofon berfungsi).
-3. cPanel → **FTP Accounts**: buat akun FTP dengan direktori ke document root subdomain.
-4. GitHub repo → **Settings → Secrets and variables → Actions** → tambah:
 
-| Secret | Contoh |
-|--------|--------|
-| `FTP_SERVER` | `ftp.sdmuhwonorejo.com` |
-| `FTP_USERNAME` | `natgeo@sdmuhwonorejo.com` |
-| `FTP_PASSWORD` | (password akun FTP) |
-| `FTP_SERVER_DIR` | `./` jika akun FTP langsung ke folder subdomain, atau `/public_html/natgeo/` |
-
-5. Buka tab **Actions** → jalankan "Deploy ke cPanel (FTP)" (atau push perubahan apa pun).
-
-**Manual:** `npm run build`, zip isi folder `dist/` (termasuk `.htaccess`), upload & extract di File Manager.
+Setiap rilis:
+1. `npm run build`
+2. Zip **isi** folder `dist/` (termasuk `.htaccess`).
+3. cPanel → **File Manager** → buka document root subdomain → upload zip → **Extract** (timpa file lama) → hapus zip.
 
 ## Menambah / mengubah soal
 Edit file di `src/data/`:
