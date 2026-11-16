@@ -11,9 +11,10 @@ export const clearName = () => safe(() => localStorage.removeItem(KEY_NAME), nul
 export const getHistory = () => safe(() => JSON.parse(localStorage.getItem(KEY_HIST) || '[]'), []);
 export const getAttempt = (id) => getHistory().find((a) => a.id === id);
 
+// Mengembalikan false bila gagal (penyimpanan penuh / diblokir) agar pemanggil bisa memberi tahu pengguna.
 export function saveAttempt(attempt) {
   const list = [attempt, ...getHistory().filter((a) => a.id !== attempt.id)].slice(0, MAX_HIST);
-  safe(() => localStorage.setItem(KEY_HIST, JSON.stringify(list)), null);
+  return safe(() => { localStorage.setItem(KEY_HIST, JSON.stringify(list)); return true; }, false);
 }
 export const clearHistory = () => safe(() => localStorage.removeItem(KEY_HIST), null);
 

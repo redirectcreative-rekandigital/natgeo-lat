@@ -45,8 +45,9 @@ Guru SD perlu berlatih menghadapi tes **CEFR correlation** (format National Geog
 
 ### 4.4 Alur Latihan
 1. Pilih paket → layar intro (jumlah soal, perkiraan waktu, petunjuk).
-2. Kerjakan soal satu per satu; progress bar; navigasi Sebelumnya/Berikutnya; nomor soal bisa diklik.
-3. Kirim → konfirmasi bila ada soal kosong.
+2. Kerjakan soal satu per satu; progress bar; navigasi Sebelumnya/Berikutnya; nomor soal bisa diklik. Tombol **Ragu-ragu** menandai soal (toggle, tidak disimpan ke hasil).
+   Warna nomor soal: biru = dijawab, kuning = ragu-ragu, merah muda = dilewati tanpa dijawab, putih = belum dibuka.
+3. Kirim → **diblokir** bila masih ada soal kosong atau ragu-ragu (modal berisi nomor soal yang bisa diklik); bila lengkap → modal konfirmasi. Gagal simpan (penyimpanan penuh/diblokir) → modal error, jawaban tetap di halaman. Tryout: saat waktu habis, jawaban terkirim otomatis apa adanya.
 4. **Hasil**: skor %, **estimasi level CEFR**, rincian per level (Pre-A1/A1/A2/B1), rincian per keterampilan (Tryout).
 5. **Pembahasan**: setiap soal menampilkan jawaban pengguna, jawaban benar, penjelasan (Bahasa Indonesia), transkrip audio (Listening), transkrip suara + contoh jawaban (Speaking), contoh jawaban model (Writing).
 6. Ulangi latihan / kembali ke beranda / cetak hasil.

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useParams, Navigate } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, ChevronLeft, Send, Timer, ListChecks, Play, Headphones, Mic, Info, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ChevronLeft, Send, Timer, ListChecks, Play, Headphones, Mic, Info, AlertTriangle, Flag, RotateCcw } from 'lucide-react';
 import { getGroup, getSet } from '../data/index.js';
 import QuestionView from '../components/QuestionView.jsx';
 import { GroupIcon, Modal } from '../components/ui.jsx';
@@ -22,7 +22,9 @@ export default function Quiz({ name }) {
   const [started, setStarted] = useState(false);
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [confirm, setConfirm] = useState(false);
+  const [ragu, setRagu] = useState({}); // { [qid]: true } — hanya selama mengerjakan
+  const [visited, setVisited] = useState({}); // soal yang sudah ditinggalkan
+  const [dialog, setDialog] = useState(null); // 'blocked' | 'confirm' | 'error'
   const [left, setLeft] = useState((set?.minutes || 0) * 60);
   const draftKey = useMemo(() => `draft-${setId}-${Date.now()}`, [setId]);
   const answersRef = useRef(answers);
@@ -33,7 +35,8 @@ export default function Quiz({ name }) {
     const t = setInterval(() => setLeft((s) => s - 1), 1000);
     return () => clearInterval(t);
   }, [started, set]);
-  useEffect(() => { if (set?.timed && started && left <= 0) submit(); }, [left]); // eslint-disable-line
+  // Waktu habis: kirim apa adanya (tanpa syarat lengkap). '=== 0' agar tidak terpanggil tiap detik bila gagal simpan.
+  useEffect(() => { if (set?.timed && started && left === 0) submit(); }, [left]); // eslint-disable-line
   useEffect(() => { stopSpeak(); }, [idx]);
   useEffect(() => {
     if (!started) return;
@@ -49,17 +52,36 @@ export default function Quiz({ name }) {
   const done = qs.filter((x) => isAnswered(x, answers[x.id])).length;
   const isTry = set.group === 'tryout';
   const has = (t) => qs.some((x) => x.type === t || (t === 'listen' && x.audio));
+  const go = (i) => { setVisited((v) => ({ ...v, [q.id]: true })); setIdx(i); };
+  const status = (x, i) => {
+    if (ragu[x.id]) return 'ragu';
+    if (isAnswered(x, answers[x.id])) return 'done';
+    return visited[x.id] && i !== idx ? 'skip' : '';
+  };
+  const empty = qs.map((x, i) => i).filter((i) => !isAnswered(qs[i], answers[qs[i].id]));
+  const doubt = qs.map((x, i) => i).filter((i) => ragu[qs[i].id]);
+  const STATUS_LABEL = { ragu: ', ragu-ragu', done: ', sudah dijawab', skip: ', dilewati' };
+  const dot = (i, onClick) => {
+    const x = qs[i];
+    const st = status(x, i);
+    return (
+      <button key={x.id} className={`qdot ${st}${i === idx ? ' cur' : ''}`} onClick={onClick} aria-label={`Soal ${i + 1}${STATUS_LABEL[st] || ''}`}>
+        {x.type === 'speak' ? <Mic size={13} /> : x.audio ? <Headphones size={13} /> : i + 1}
+      </button>
+    );
+  };
 
   function submit() {
     stopSpeak();
     const res = gradeAttempt(set, answersRef.current);
     const id = `${set.id}-${Date.now().toString(36)}`;
-    moveAudio(draftKey, id);
-    saveAttempt({
+    const ok = saveAttempt({
       id, setId: set.id, group: set.group, title: set.title, name, ts: Date.now(),
       answers: answersRef.current, pct: res.pct, level: res.level, earned: res.earned, total: res.total,
       byLevel: res.byLevel, bySkill: res.bySkill, items: res.items,
     });
+    if (!ok) { setDialog('error'); return; }
+    moveAudio(draftKey, id);
     nav(`/result/${id}`, { replace: true });
   }
 
@@ -79,7 +101,8 @@ export default function Quiz({ name }) {
           <h3>Petunjuk</h3>
           <ul className="muted" style={{ paddingLeft: 20, marginTop: 4 }}>
             <li>Soal berjenjang dari <b>Pre-A1</b> sampai <b>B1</b>.</li>
-            <li>Anda bisa berpindah soal dengan tombol atau nomor soal.</li>
+            <li>Anda bisa berpindah soal dengan tombol atau nomor soal. Tandai soal yang belum yakin dengan <b>Ragu-ragu</b>.</li>
+            <li>Jawaban baru bisa dikirim setelah <b>semua soal dijawab</b> dan tidak ada tanda ragu-ragu.</li>
             {has('listen') && <li>Soal Listening: tekan <b>Putar</b> untuk mendengar audio. Boleh diulang dan diperlambat.</li>}
             {has('speak') && <li>Soal Speaking: tekan <b>mikrofon</b>, jawab dalam bahasa Inggris, lalu tekan berhenti.</li>}
             {has('write') && <li>Soal Writing: perhatikan target jumlah kata, huruf kapital, dan tanda baca.</li>}
@@ -116,32 +139,49 @@ export default function Quiz({ name }) {
         onChange={(v) => setAnswers((a) => ({ ...a, [q.id]: v }))} />
 
       <div className="qdots" aria-label="Nomor soal">
-        {qs.map((x, i) => (
-          <button key={x.id} className={`qdot${isAnswered(x, answers[x.id]) ? ' done' : ''}${i === idx ? ' cur' : ''}`} onClick={() => setIdx(i)} aria-label={`Soal ${i + 1}`}>
-            {x.type === 'speak' ? <Mic size={13} /> : x.audio ? <Headphones size={13} /> : i + 1}
-          </button>
-        ))}
+        {qs.map((x, i) => dot(i, () => go(i)))}
+      </div>
+      <div className="qlegend" aria-hidden>
+        <span><i className="done" />Dijawab</span><span><i className="ragu" />Ragu-ragu</span><span><i className="skip" />Dilewati</span><span><i />Belum dibuka</span>
       </div>
 
       <div className="quiz-nav">
         <div className="quiz-nav-in">
-          <button className="btn btn-secondary" disabled={idx === 0} onClick={() => setIdx(idx - 1)}><ChevronLeft size={18} />Sebelumnya</button>
+          <button className="btn btn-secondary btn-prev" disabled={idx === 0} onClick={() => go(idx - 1)} aria-label="Sebelumnya"><ChevronLeft size={18} /><span className="lbl">Sebelumnya</span></button>
+          <button className={`btn btn-ragu${ragu[q.id] ? ' on' : ''}`} aria-pressed={!!ragu[q.id]} onClick={() => setRagu((r) => ({ ...r, [q.id]: !r[q.id] }))}><Flag size={18} />Ragu-ragu</button>
           <span className="spacer" />
           {idx < qs.length - 1
-            ? <button className="btn btn-primary" onClick={() => setIdx(idx + 1)}>Berikutnya<ArrowRight size={18} /></button>
-            : <button className="btn btn-primary" onClick={() => setConfirm(true)}><Send size={18} />Kirim jawaban</button>}
+            ? <button className="btn btn-primary" onClick={() => go(idx + 1)}>Berikutnya<ArrowRight size={18} /></button>
+            : <button className="btn btn-primary" onClick={() => setDialog(empty.length || doubt.length ? 'blocked' : 'confirm')}><Send size={18} />Kirim</button>}
         </div>
       </div>
 
-      {confirm && (
-        <Modal onClose={() => setConfirm(false)}>
+      {dialog === 'blocked' && (
+        <Modal onClose={() => setDialog(null)}>
+          <h3>Belum bisa dikirim</h3>
+          <div className="notice" style={{ marginBottom: 14 }}><AlertTriangle size={18} style={{ flex: 'none' }} />Semua soal harus dijawab dan tidak boleh ada tanda ragu-ragu. Ketuk nomor soal untuk menuju soal tersebut.</div>
+          {empty.length > 0 && <><b>{empty.length} soal belum dijawab</b><div className="qdots" style={{ margin: '8px 0 14px' }}>{empty.map((i) => dot(i, () => { setDialog(null); go(i); }))}</div></>}
+          {doubt.length > 0 && <><b>{doubt.length} soal masih ragu-ragu</b><div className="qdots" style={{ margin: '8px 0 14px' }}>{doubt.map((i) => dot(i, () => { setDialog(null); go(i); }))}</div></>}
+          <button className="btn btn-primary btn-block" onClick={() => setDialog(null)}>Kembali mengerjakan</button>
+        </Modal>
+      )}
+      {dialog === 'confirm' && (
+        <Modal onClose={() => setDialog(null)}>
           <h3>Kirim jawaban?</h3>
-          {done < qs.length
-            ? <div className="notice" style={{ marginBottom: 14 }}><AlertTriangle size={18} />Masih ada {qs.length - done} soal yang belum dijawab. Soal kosong dinilai 0.</div>
-            : <p className="muted">Semua soal sudah dijawab. Lihat hasil dan pembahasan sekarang.</p>}
+          <p className="muted">Semua {qs.length} soal sudah dijawab. Setelah dikirim, jawaban tidak bisa diubah. Anda akan melihat hasil dan pembahasan.</p>
           <div className="btn-row">
             <button className="btn btn-primary" onClick={submit}><Send size={18} />Ya, kirim</button>
-            <button className="btn btn-ghost" onClick={() => setConfirm(false)}>Periksa lagi</button>
+            <button className="btn btn-ghost" onClick={() => setDialog(null)}>Periksa lagi</button>
+          </div>
+        </Modal>
+      )}
+      {dialog === 'error' && (
+        <Modal onClose={() => setDialog(null)}>
+          <h3>Gagal menyimpan jawaban</h3>
+          <div className="notice err" style={{ marginBottom: 14 }}><AlertTriangle size={18} style={{ flex: 'none' }} />Browser menolak menyimpan hasil (penyimpanan penuh atau mode penyamaran/privat). Jawaban Anda masih ada di halaman ini — jangan tutup atau muat ulang halaman.</div>
+          <div className="btn-row">
+            <button className="btn btn-primary" onClick={submit}><RotateCcw size={18} />Coba lagi</button>
+            <button className="btn btn-ghost" onClick={() => setDialog(null)}>Tutup</button>
           </div>
         </Modal>
       )}
